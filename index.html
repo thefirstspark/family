@@ -3,589 +3,859 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex, nofollow">
-<title>The Family Codex — KJP</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Family Resonance — The First Spark</title>
+<meta name="description" content="See your soul constellation. Verified bonds, frequency match scores, and lineage echoes for any Quantum Signature.">
+<meta property="og:title" content="Family Resonance — Soul Constellation">
+<meta property="og:description" content="Every signature has a constellation. Find yours.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Mono:wght@400;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --black: #0B0B0C;
-    --ink: #15151A;
-    --ember: #FF6A3D;
-    --gold: #F3B23A;
-    --violet: #6B4DF2;
-    --cyan: #26E4D8;
-    --bone: #F5F1EA;
-    --dim: rgba(245,241,234,0.55);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body {
-    background: var(--black);
-    color: var(--bone);
-    font-family: 'Cormorant Garamond', serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-  }
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image:
-      radial-gradient(circle at 18% 25%, rgba(107,77,242,0.18), transparent 45%),
-      radial-gradient(circle at 82% 75%, rgba(255,106,61,0.12), transparent 50%),
-      radial-gradient(circle at 50% 100%, rgba(38,228,216,0.08), transparent 60%),
-      radial-gradient(circle at 50% 0%, rgba(243,178,58,0.06), transparent 50%);
-    pointer-events: none; z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.06 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
-    pointer-events: none; z-index: 1; opacity: 0.6;
-  }
-  .floating-glyph {
-    position: fixed;
-    font-family: 'Cinzel', serif;
-    opacity: 0.08;
-    pointer-events: none;
-    z-index: 1;
-    animation: drift 25s infinite ease-in-out;
-  }
-  .floating-glyph:nth-child(1) { top: 8%; left: 4%; font-size: 80px; color: var(--violet); animation-delay: 0s; }
-  .floating-glyph:nth-child(2) { top: 55%; right: 6%; font-size: 120px; color: var(--ember); animation-delay: -8s; }
-  .floating-glyph:nth-child(3) { top: 28%; right: 10%; font-size: 60px; color: var(--gold); animation-delay: -15s; }
-  .floating-glyph:nth-child(4) { bottom: 12%; left: 6%; font-size: 90px; color: var(--cyan); animation-delay: -20s; }
-  @keyframes drift {
-    0%, 100% { transform: translate(0,0) rotate(0deg); }
-    33% { transform: translate(20px, -30px) rotate(8deg); }
-    66% { transform: translate(-15px, 20px) rotate(-5deg); }
-  }
+:root {
+  --core-black: #0B0B0C;
+  --deep-space: #03010d;
+  --indigo-deep: #0d0728;
+  --indigo: #1a1145;
+  --ember: #FF6A3D;
+  --gold: #F3B23A;
+  --gold-soft: #FFE9A8;
+  --violet: #6B4DF2;
+  --violet-soft: #8B6FFF;
+  --cyan: #26E4D8;
+  --soft-white: #f0f0f0;
+  --dim: #888;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  background: radial-gradient(ellipse at center, var(--indigo-deep) 0%, var(--deep-space) 100%);
+  color: var(--soft-white);
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+.star {
+  position: absolute; width: 2px; height: 2px;
+  background: white; border-radius: 50%;
+  animation: twinkle 3s infinite;
+}
+@keyframes twinkle { 0%,100% { opacity: 0.2; } 50% { opacity: 1; } }
+.container {
+  position: relative; z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
 
-  /* ===== GATE ===== */
-  .gate {
-    position: fixed; inset: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--black);
-    transition: opacity 0.7s ease, visibility 0.7s ease;
-  }
-  .gate.unlocked { opacity: 0; visibility: hidden; }
-  .gate::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 50%, rgba(255,106,61,0.18), transparent 60%);
-  }
-  .gate-sigil {
-    position: absolute;
-    width: 320px; height: 320px;
-    border: 1px solid rgba(243,178,58,0.15);
-    border-radius: 50%;
-    animation: rotate 60s linear infinite;
-  }
-  .gate-sigil::before, .gate-sigil::after {
-    content: '';
-    position: absolute; inset: 24px;
-    border: 1px solid rgba(107,77,242,0.2);
-    border-radius: 50%;
-  }
-  .gate-sigil::after { inset: 60px; border-color: rgba(255,106,61,0.18); }
-  @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .gate-inner {
-    position: relative; z-index: 2;
-    text-align: center;
-    padding: 40px 24px;
-    max-width: 460px; width: 100%;
-  }
-  .gate-mark {
-    font-family: 'Cinzel', serif;
-    font-size: 10px; letter-spacing: 0.45em;
-    color: var(--ember);
-    margin-bottom: 36px; text-transform: uppercase;
-  }
-  .gate-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic; font-weight: 300;
-    font-size: clamp(40px, 10vw, 60px);
-    line-height: 1.0; margin-bottom: 14px;
-    color: var(--bone);
-  }
-  .gate-title em { color: var(--ember); font-style: italic; }
-  .gate-sub {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; letter-spacing: 0.2em;
-    color: var(--gold);
-    margin-bottom: 44px; text-transform: uppercase;
-  }
-  .pin-box { display: flex; gap: 10px; justify-content: center; margin-bottom: 28px; }
-  .pin-box input {
-    width: 48px; height: 62px;
-    background: transparent;
-    border: 1px solid rgba(245,241,234,0.18);
-    border-bottom: 2px solid var(--ember);
-    color: var(--bone);
-    font-family: 'Space Mono', monospace;
-    font-size: 22px; text-align: center;
-    outline: none; transition: all 0.2s ease;
-    caret-color: var(--gold);
-  }
-  .pin-box input:focus { border-color: var(--gold); background: rgba(243,178,58,0.05); }
-  .pin-box.error input { border-color: var(--ember); animation: shake 0.4s ease; }
-  @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
-  .gate-hint {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; letter-spacing: 0.2em;
-    color: var(--dim); text-transform: uppercase;
-  }
-  .gate-hint span { color: var(--cyan); }
+header { text-align: center; margin-bottom: 40px; }
+.brand-tag {
+  font-size: 11px; letter-spacing: 6px;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 14px; opacity: 0.85;
+}
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--cyan), var(--violet), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-style: italic;
+  color: var(--gold-soft);
+  max-width: 580px; margin: 0 auto 6px;
+}
+.meta-line { font-size: 0.78rem; color: rgba(240,240,240,0.5); letter-spacing: 2px; }
 
-  /* ===== CONTENT ===== */
-  main {
-    position: relative; z-index: 2;
-    opacity: 0; transition: opacity 0.8s ease 0.3s;
-    padding: 80px 24px 120px;
-    max-width: 780px; margin: 0 auto;
-  }
-  main.show { opacity: 1; }
+.lookup-bar {
+  background: rgba(13, 7, 40, 0.6);
+  border: 1px solid rgba(243, 178, 58, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.lookup-bar label {
+  font-size: 11px; letter-spacing: 2px;
+  color: rgba(240,240,240,0.6);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.lookup-bar input {
+  flex: 1; min-width: 200px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(38, 228, 216, 0.3);
+  color: var(--soft-white);
+  padding: 12px 14px;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  border-radius: 8px;
+  text-transform: uppercase;
+}
+.lookup-bar input:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(38, 228, 216, 0.15);
+}
 
-  .top-mark {
-    font-family: 'Cinzel', serif;
-    font-size: 10px; letter-spacing: 0.45em;
-    color: var(--ember); text-transform: uppercase;
-    margin-bottom: 40px;
-    display: flex; align-items: center; gap: 14px;
-  }
-  .top-mark::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, var(--ember), transparent); }
+.btn {
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 12px 28px; border: none;
+  border-radius: 50px; cursor: pointer;
+  transition: all 0.3s;
+  background: linear-gradient(90deg, var(--ember), var(--gold));
+  color: var(--core-black);
+  box-shadow: 0 0 20px rgba(255, 106, 61, 0.3);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 40px rgba(255, 106, 61, 0.6);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  box-shadow: none;
+}
+.btn-secondary:hover {
+  background: rgba(38, 228, 216, 0.1);
+  box-shadow: 0 0 20px rgba(38, 228, 216, 0.3);
+}
 
-  h1.hero {
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 300; font-style: italic;
-    font-size: clamp(48px, 10vw, 84px);
-    line-height: 0.98; margin-bottom: 24px;
-    letter-spacing: -0.02em;
-  }
-  h1.hero em { color: var(--ember); }
-  .hero-sub {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px; letter-spacing: 0.2em;
-    color: var(--gold);
-    margin-bottom: 60px; text-transform: uppercase;
-  }
+.center-name-card {
+  background: linear-gradient(135deg, rgba(243, 178, 58, 0.08) 0%, rgba(13, 7, 40, 0.6) 100%);
+  border: 1px solid rgba(243, 178, 58, 0.3);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.center-avatar {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cinzel', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--core-black);
+  box-shadow: 0 0 30px rgba(243, 178, 58, 0.4);
+  flex-shrink: 0;
+}
+.center-info { flex: 1; min-width: 200px; }
+.center-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.center-sig {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.95rem;
+  color: var(--cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 4px;
+}
+.center-meta {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: rgba(240,240,240,0.7);
+}
 
-  .opening {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; line-height: 1.55;
-    color: var(--bone);
-    margin-bottom: 50px;
-    padding: 30px 0 30px 24px;
-    border-left: 2px solid var(--ember);
-  }
-  .opening p + p { margin-top: 16px; }
-  .opening em { color: var(--gold); font-style: italic; }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.stat {
+  background: rgba(0,0,0,0.4);
+  padding: 14px 16px;
+  border-radius: 10px;
+  border-left: 3px solid var(--cyan);
+}
+.stat-label {
+  font-size: 10px; letter-spacing: 2px;
+  color: rgba(240,240,240,0.5);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.stat-value {
+  font-family: 'Cinzel', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+.stat-sub {
+  font-size: 0.75rem;
+  color: rgba(240,240,240,0.5);
+  margin-top: 2px;
+}
 
-  section { margin: 70px 0; }
-  h2 {
-    font-family: 'Cinzel', serif;
-    font-weight: 500; font-size: 13px;
-    letter-spacing: 0.35em;
-    color: var(--cyan); text-transform: uppercase;
-    margin-bottom: 22px;
-    display: flex; align-items: baseline; gap: 14px;
-  }
-  h2::before {
-    content: counter(sec, decimal-leading-zero);
-    counter-increment: sec;
-    font-family: 'Space Mono', monospace;
-    font-size: 11px; color: var(--ember);
-    letter-spacing: 0.1em;
-  }
-  body { counter-reset: sec; }
+.constellation-wrap {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(107, 77, 242, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 30px;
+  position: relative;
+}
+.constellation-svg {
+  width: 100%;
+  display: block;
+  user-select: none;
+}
 
-  p, li {
-    font-size: 19px; line-height: 1.65;
-    color: var(--bone);
-    margin-bottom: 16px;
-  }
-  p em { color: var(--gold); font-style: italic; }
-  strong { color: var(--ember); font-weight: 500; }
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  letter-spacing: 4px;
+  color: var(--gold);
+  text-transform: uppercase;
+  text-align: center;
+  margin: 30px 0 16px;
+}
 
-  /* MAGICAL INLINE LINKS */
-  a.glyph {
-    color: var(--cyan);
-    text-decoration: none;
-    font-style: italic;
-    position: relative;
-    padding: 0 2px;
-    transition: all 0.3s ease;
-    border-bottom: 1px dotted rgba(38,228,216,0.4);
-  }
-  a.glyph::before {
-    content: '◆';
-    font-size: 8px;
-    margin-right: 4px;
-    color: var(--gold);
-    opacity: 0.6;
-    transition: all 0.3s ease;
-  }
-  a.glyph:hover {
-    color: var(--gold);
-    border-bottom-color: var(--gold);
-    text-shadow: 0 0 12px rgba(243,178,58,0.5);
-  }
-  a.glyph:hover::before {
-    color: var(--ember);
-    opacity: 1;
-    transform: rotate(45deg);
-    display: inline-block;
-  }
-  a.ember { color: var(--ember); border-bottom-color: rgba(255,106,61,0.4); }
-  a.ember:hover { color: var(--gold); border-bottom-color: var(--gold); }
-  a.violet { color: var(--violet); border-bottom-color: rgba(107,77,242,0.4); }
-  a.violet:hover { color: var(--cyan); border-bottom-color: var(--cyan); }
+.bonds-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 30px;
+}
+.bond-card {
+  background: rgba(13, 7, 40, 0.6);
+  border: 1px solid rgba(38, 228, 216, 0.2);
+  border-radius: 12px;
+  padding: 16px 18px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.bond-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(38, 228, 216, 0.15);
+}
+.bond-card.active {
+  border-color: var(--gold);
+  background: rgba(243, 178, 58, 0.08);
+  box-shadow: 0 0 30px rgba(243, 178, 58, 0.2);
+}
+.bond-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.bond-name {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  color: var(--gold);
+  font-weight: 600;
+}
+.bond-resonance {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--cyan);
+}
+.bond-relationship {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--violet-soft);
+  margin-bottom: 6px;
+}
+.bond-context {
+  font-size: 0.78rem;
+  color: rgba(240,240,240,0.6);
+  line-height: 1.4;
+}
+.bond-sig {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(38, 228, 216, 0.6);
+  margin-top: 6px;
+}
 
-  ul { list-style: none; padding-left: 0; margin-bottom: 16px; }
-  ul li {
-    padding-left: 24px; position: relative;
-    margin-bottom: 14px;
-  }
-  ul li::before {
-    content: '◆'; position: absolute;
-    left: 0; top: 6px;
-    color: var(--violet); font-size: 10px;
-  }
+.add-bond-section {
+  background: rgba(13, 7, 40, 0.6);
+  border: 1px dashed rgba(255, 106, 61, 0.4);
+  border-radius: 16px;
+  padding: 28px;
+  margin-top: 30px;
+}
+.add-bond-title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+  color: var(--ember);
+  text-align: center;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.add-bond-sub {
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: rgba(240,240,240,0.6);
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+.form-field label {
+  display: block;
+  font-size: 11px; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(240,240,240,0.55);
+  margin-bottom: 6px;
+}
+.form-field input, .form-field select {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(243, 178, 58, 0.2);
+  color: var(--soft-white);
+  padding: 10px 12px;
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  border-radius: 6px;
+}
 
-  .pull {
-    margin: 50px -10px;
-    padding: 36px 30px;
-    background: linear-gradient(135deg, rgba(107,77,242,0.08), rgba(255,106,61,0.04));
-    border-top: 1px solid rgba(243,178,58,0.3);
-    border-bottom: 1px solid rgba(243,178,58,0.3);
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 26px; line-height: 1.4;
-    color: var(--bone); text-align: center;
-  }
-  .pull span {
-    display: block; margin-top: 14px;
-    font-family: 'Space Mono', monospace;
-    font-style: normal;
-    font-size: 10px; letter-spacing: 0.3em;
-    color: var(--gold); text-transform: uppercase;
-  }
+.error-msg, .info-msg {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin: 16px 0;
+  text-align: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+}
+.error-msg {
+  background: rgba(255, 106, 61, 0.1);
+  border: 1px solid var(--ember);
+  color: var(--ember);
+}
+.info-msg {
+  background: rgba(38, 228, 216, 0.1);
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+}
 
-  /* ===== PORTAL CODEX ===== */
-  .codex {
-    margin: 100px 0 60px;
-    padding: 50px 0;
-    border-top: 1px solid rgba(243,178,58,0.3);
-    border-bottom: 1px solid rgba(243,178,58,0.3);
-    position: relative;
-  }
-  .codex-mark {
-    text-align: center;
-    font-family: 'Cinzel', serif;
-    font-size: 10px; letter-spacing: 0.45em;
-    color: var(--ember); text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .codex-title {
-    text-align: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic; font-weight: 300;
-    font-size: clamp(34px, 6vw, 48px);
-    color: var(--bone);
-    margin-bottom: 8px;
-  }
-  .codex-title em { color: var(--ember); }
-  .codex-sub {
-    text-align: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; letter-spacing: 0.25em;
-    color: var(--gold); text-transform: uppercase;
-    margin-bottom: 50px;
-  }
+.loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--gold);
+  font-style: italic;
+}
+.spinner {
+  width: 50px; height: 50px;
+  margin: 0 auto 20px;
+  border: 3px solid rgba(38, 228, 216, 0.2);
+  border-top-color: var(--cyan);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-  .portals {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-  }
-  .portal {
-    display: block;
-    text-decoration: none;
-    background: rgba(21,21,26,0.6);
-    border: 1px solid rgba(245,241,234,0.08);
-    padding: 24px 22px;
-    transition: all 0.4s ease;
-    position: relative;
-    overflow: hidden;
-  }
-  .portal::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(243,178,58,0.08), transparent);
-    transition: left 0.6s ease;
-  }
-  .portal:hover::before { left: 100%; }
-  .portal:hover {
-    border-color: var(--gold);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(243,178,58,0.15);
-  }
-  .portal-glyph {
-    font-family: 'Cinzel', serif;
-    font-size: 22px;
-    color: var(--ember);
-    margin-bottom: 14px;
-    display: block;
-    transition: transform 0.4s ease;
-  }
-  .portal:hover .portal-glyph { transform: rotate(15deg) scale(1.1); }
-  .portal-name {
-    font-family: 'Cinzel', serif;
-    font-size: 12px; letter-spacing: 0.2em;
-    color: var(--bone); text-transform: uppercase;
-    margin-bottom: 8px;
-    display: block;
-  }
-  .portal-desc {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 14px; line-height: 1.4;
-    color: var(--dim);
-    display: block;
-  }
-  .portal:hover .portal-name { color: var(--gold); }
-  .portal:hover .portal-desc { color: var(--bone); }
+.hidden { display: none !important; }
 
-  .signoff {
-    margin-top: 90px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(245,241,234,0.1);
-    text-align: center;
-  }
-  .signoff p {
-    font-style: italic;
-    font-size: 22px; color: var(--bone);
-    margin-bottom: 18px;
-  }
-  .signoff .name {
-    font-family: 'Cinzel', serif;
-    font-size: 14px; letter-spacing: 0.4em;
-    color: var(--ember); text-transform: uppercase;
-  }
-  .signoff .where {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px; letter-spacing: 0.25em;
-    color: var(--dim);
-    margin-top: 30px; text-transform: uppercase;
-  }
+footer {
+  text-align: center;
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(243, 178, 58, 0.15);
+  font-size: 11px; letter-spacing: 2px;
+  color: rgba(240,240,240,0.4);
+}
+footer a { color: var(--gold); text-decoration: none; }
+.tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: rgba(243, 178, 58, 0.6);
+  margin-bottom: 8px;
+}
 
-  @media (max-width: 600px) {
-    main { padding: 60px 20px 100px; }
-    .opening { font-size: 19px; padding-left: 18px; }
-    p, li { font-size: 17px; }
-    .pull { font-size: 21px; padding: 28px 22px; }
-    .pin-box input { width: 42px; height: 56px; font-size: 20px; }
-    .gate-sigil { width: 240px; height: 240px; }
-  }
+.legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  justify-content: center;
+  margin: 12px 0;
+  font-size: 11px;
+  color: rgba(240,240,240,0.6);
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
 </style>
 </head>
 <body>
 
-<!-- floating background sigils -->
-<div class="floating-glyph">◆</div>
-<div class="floating-glyph">✦</div>
-<div class="floating-glyph">⬢</div>
-<div class="floating-glyph">◈</div>
+<div class="stars" id="stars"></div>
 
-<!-- ===== GATE ===== -->
-<div class="gate" id="gate">
-  <div class="gate-sigil"></div>
-  <div class="gate-inner">
-    <div class="gate-mark">◆ Family Only ◆</div>
-    <h1 class="gate-title">come <em>in</em></h1>
-    <div class="gate-sub">Five digits. You know them.</div>
-    <div class="pin-box" id="pinBox">
-      <input type="tel" maxlength="1" inputmode="numeric" autocomplete="off">
-      <input type="tel" maxlength="1" inputmode="numeric" autocomplete="off">
-      <input type="tel" maxlength="1" inputmode="numeric" autocomplete="off">
-      <input type="tel" maxlength="1" inputmode="numeric" autocomplete="off">
-      <input type="tel" maxlength="1" inputmode="numeric" autocomplete="off">
-    </div>
-    <div class="gate-hint" id="hint">Tap to begin · <span>family pin</span></div>
-  </div>
+<div class="container">
+
+<header>
+  <div class="brand-tag">The First Spark · Soul Constellation</div>
+  <h1>FAMILY RESONANCE</h1>
+  <p class="subtitle">Every signature has a constellation. Every constellation tells a story.</p>
+  <p class="meta-line">⚡ QUANTUM-LINKED · BLOODLINE-AWARE · LINEAGE-OPEN ⚡</p>
+</header>
+
+<div class="lookup-bar">
+  <label>Quantum Signature</label>
+  <input type="text" id="sigInput" placeholder="8AFE9CB68598 or 8AFE·9CB6·8598" value="8AFE9CB68598" maxlength="14">
+  <button class="btn" onclick="loadConstellation()">⚡ Show Constellation</button>
 </div>
 
-<!-- ===== CONTENT ===== -->
-<main id="content">
-  <div class="top-mark">A letter & a codex · KJP</div>
+<div id="errorBox" class="hidden"></div>
 
-  <h1 class="hero">hi. it's <em>me.</em></h1>
-  <div class="hero-sub">Right Here · Right Now</div>
+<div id="loading" class="loading hidden">
+  <div class="spinner"></div>
+  <div>Mapping the constellation...</div>
+</div>
 
-  <div class="opening">
-    <p>I've been shitty. I know I have. I've been distant, in my head, hard to reach — and I'm sorry. None of it was about not loving you.</p>
-    <p>I wanted to give you something better than another half-explanation. So here it is — <em>everything</em>. What I've been building, why I've been building it, and where it all comes from.</p>
-    <p>Read it slow. Click the doorways when you want to wander deeper. <em>This is my whole world.</em></p>
-  </div>
+<div id="content" class="hidden">
 
-  <section>
-    <h2>The Short Version</h2>
-    <p>I'm building a company called <a class="glyph ember" href="https://thefirstspark.shop" target="_blank" rel="noopener">The First Spark</a>. It's a consciousness technology platform — software, writing, frameworks, and tools that help people understand themselves and the world they're inside of.</p>
-    <p>I built it alone. I taught myself to code through it. There are now <em>over ninety</em> tools live on the internet under my name. Real software. Real users. Real revenue.</p>
-    <p>It's not a hobby. It's not a phase. It's a <strong>company</strong>, and it has a <a class="glyph" href="https://thefirstspark.shop/investor-deck-v2.html" target="_blank" rel="noopener">real investor deck</a>, a <a class="glyph" href="https://voyageohio.com/interview/conversations-with-katelin-puzakulics/" target="_blank" rel="noopener">press feature</a>, and paying customers.</p>
-  </section>
-
-  <section>
-    <h2>Why I Built It</h2>
-    <p>You all know what happened to mom. Most of you lived it longer than I did — I was two.</p>
-    <p>What you might not know is that in <strong>2018</strong> I started looking. And in <strong>2020</strong>, during a quiet COVID week, I figured out what nobody had said out loud. I sat with that knowledge alone for a long time.</p>
-    <p>Then in the summer of 2025, something shifted. I'm calling it the <em>raft moment</em>. The grief, the silence, the years of half-knowing — it stopped being a wound and became a <strong>blueprint</strong>.</p>
-    <p>The whole story is in something I'm writing called <a class="glyph violet" href="https://thefirstspark.shop" target="_blank" rel="noopener">Book Zero</a> — my memoir. And the symbolic version of it lives in <a class="glyph" href="https://thefirstspark.shop" target="_blank" rel="noopener">Whispers of Niagara Avenue</a>, which I literally printed and walked down that street to distribute.</p>
-    <p>Everything I'm building now is the answer to a question I've been carrying since I was a baby: <em>what do you do with what you survive?</em></p>
-  </section>
-
-  <div class="pull">
-    "You build the thing you wish had existed for you."
-    <span>— the thesis, in one line</span>
-  </div>
-
-  <section>
-    <h2>The Spark Itself</h2>
-    <p>The center of all of it is something I call <a class="glyph ember" href="https://thefirstspark.shop" target="_blank" rel="noopener">the Selector Model</a> — my original philosophy. Four layers of how reality actually works: <em>Physics, Metaphysical, Relational, Temporal.</em> Think of it as an operating system for consciousness. Everything else I've built sits on top of it.</p>
-    <p>I know how that sounds. I know. But I want you to actually <em>look</em> at what's there before you decide. Click anything. Read a page. Spend three minutes inside it. The work speaks.</p>
-  </section>
-
-  <section>
-    <h2>What Lives Inside</h2>
-    <p>The world has rooms. Each one is a real, working thing on the internet — built by me, hosted under my domain, used by real people:</p>
-    <ul>
-      <li><a class="glyph" href="https://soul-maps.thefirstspark.shop" target="_blank" rel="noopener">Soul Maps</a> — personalized blueprints I generate for people. Numerology + astrology + the Selector Model, woven into a single document about who someone is. <em>This is what pays the bills right now.</em></li>
-      <li><a class="glyph violet" href="https://sigilcraft.thefirstspark.shop" target="_blank" rel="noopener">Sigilcraft</a> — a digital forge for making sigils. Daily sigil, soul sigil generator, library, grimoire. All browser-based. All mine.</li>
-      <li><a class="glyph ember" href="https://rituals.thefirstspark.shop" target="_blank" rel="noopener">Rituals</a> — the practice layer. Where the philosophy becomes a daily thing.</li>
-      <li><a class="glyph" href="https://whop.com/sparkverse-511c" target="_blank" rel="noopener">The Sparkverse</a> — the community. Real humans who get what I'm doing.</li>
-      <li><a class="glyph violet" href="https://thefirstspark.shop/pressstart.html" target="_blank" rel="noopener">Press Start</a> — my accountability dashboard. Where I track the build in public.</li>
-    </ul>
-    <p>That's not all of it. There are <em>ninety-plus</em> tools. The ones above are just the front doors.</p>
-  </section>
-
-  <div class="pull">
-    "Every page on this list is something I made with my own hands.<br>Click one. See what I mean."
-    <span>— the proof is in the work</span>
-  </div>
-
-  <section>
-    <h2>Where I Am Right Now</h2>
-    <p>I'm raising a small round from friends and family — <strong>$300K for 20%</strong> equity at a $1.5M post-money valuation, on a SAFE note. The full pitch is in my <a class="glyph ember" href="https://thefirstspark.shop/investor-deck-v2.html" target="_blank" rel="noopener">investor deck</a>.</p>
-    <p>I was also featured in <a class="glyph" href="https://voyageohio.com/interview/conversations-with-katelin-puzakulics/" target="_blank" rel="noopener">Voyage Ohio Hidden Gems</a> in March — that's not nothing. That's real press, validating that what I'm doing is worth paying attention to.</p>
-    <p>I'm not putting this page in front of you to ask for money. I'm putting it in front of you so you <em>see</em>. The quiet years weren't empty. They were the foundation.</p>
-  </section>
-
-  <section>
-    <h2>What I'm Asking</h2>
-    <p>Honestly? Just to be known again. To not be the cousin / sister / daughter / niece who went quiet — but the one who was <em>building</em> something while she was quiet.</p>
-    <p>If you click around the codex below and feel something stir — that's the spark. That's what I'm trying to give the world. <em>I just wanted family to feel it first.</em></p>
-    <p>And if you want to talk about any of it — the work, mom, the years I went silent, the future — I'm here. I'm ready in a way I wasn't before.</p>
-  </section>
-
-  <!-- ===== THE PORTAL CODEX ===== -->
-  <div class="codex">
-    <div class="codex-mark">◆ The Codex ◆</div>
-    <h2 class="codex-title" style="color: var(--bone); display: block; text-align: center;">wander <em>deeper</em></h2>
-    <div class="codex-sub">Each portal is real. Each one is mine.</div>
-
-    <div class="portals">
-      <a class="portal" href="https://thefirstspark.shop" target="_blank" rel="noopener">
-        <span class="portal-glyph">✦</span>
-        <span class="portal-name">The First Spark</span>
-        <span class="portal-desc">The home page. The mothership. Start here.</span>
-      </a>
-      <a class="portal" href="https://soul-maps.thefirstspark.shop" target="_blank" rel="noopener">
-        <span class="portal-glyph">◈</span>
-        <span class="portal-name">Soul Maps</span>
-        <span class="portal-desc">Personalized consciousness blueprints. The flagship.</span>
-      </a>
-      <a class="portal" href="https://sigilcraft.thefirstspark.shop" target="_blank" rel="noopener">
-        <span class="portal-glyph">⬢</span>
-        <span class="portal-name">Sigilcraft</span>
-        <span class="portal-desc">A digital forge for symbols. Make a sigil.</span>
-      </a>
-      <a class="portal" href="https://rituals.thefirstspark.shop" target="_blank" rel="noopener">
-        <span class="portal-glyph">◆</span>
-        <span class="portal-name">Rituals</span>
-        <span class="portal-desc">Daily practice. Philosophy becomes habit.</span>
-      </a>
-      <a class="portal" href="https://whop.com/sparkverse-511c" target="_blank" rel="noopener">
-        <span class="portal-glyph">✺</span>
-        <span class="portal-name">The Sparkverse</span>
-        <span class="portal-desc">The community. Where the believers gather.</span>
-      </a>
-      <a class="portal" href="https://thefirstspark.shop/investor-deck-v2.html" target="_blank" rel="noopener">
-        <span class="portal-glyph">◐</span>
-        <span class="portal-name">The Deck</span>
-        <span class="portal-desc">The pitch. The vision. The numbers.</span>
-      </a>
-      <a class="portal" href="https://thefirstspark.shop/pressstart.html" target="_blank" rel="noopener">
-        <span class="portal-glyph">▲</span>
-        <span class="portal-name">Press Start</span>
-        <span class="portal-desc">My accountability dashboard. Building in public.</span>
-      </a>
-      <a class="portal" href="https://x.com/OGplayerone" target="_blank" rel="noopener">
-        <span class="portal-glyph">⊛</span>
-        <span class="portal-name">@OGplayerone</span>
-        <span class="portal-desc">Where I think out loud. Follow along.</span>
-      </a>
+  <div class="center-name-card">
+    <div class="center-avatar" id="centerAvatar">K</div>
+    <div class="center-info">
+      <div class="center-name" id="centerName">—</div>
+      <div class="center-sig" id="centerSig">—</div>
+      <div class="center-meta" id="centerMeta">—</div>
     </div>
   </div>
 
-  <div class="signoff">
-    <p>I love you. That part never moved.</p>
-    <div class="name">— KJP</div>
-    <div class="where">Akron, Ohio · Right Here Right Now</div>
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-label">Verified Bonds</div>
+      <div class="stat-value" id="bondCount">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Avg Resonance</div>
+      <div class="stat-value" id="avgRes">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Strongest</div>
+      <div class="stat-value" id="topBond">—</div>
+      <div class="stat-sub" id="topBondScore">—</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Rarest</div>
+      <div class="stat-value" id="rarestBond">—</div>
+      <div class="stat-sub" id="rarestTier">—</div>
+    </div>
   </div>
-</main>
+
+  <div class="constellation-wrap">
+    <svg class="constellation-svg" id="constellation" viewBox="0 0 700 540" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#F3B23A" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#F3B23A" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g id="connections"></g>
+      <g id="nodes"></g>
+    </svg>
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#FF6A3D"></span>Bloodline (DNA-eligible)</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#6B4DF2"></span>Soul Resonance</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#26E4D8"></span>Ancestor / Lineage</div>
+    </div>
+  </div>
+
+  <div class="section-title">◈ All Verified Bonds ◈</div>
+  <div class="bonds-list" id="bondsList"></div>
+
+  <div class="add-bond-section">
+    <div class="add-bond-title">⚡ Claim a New Bond ⚡</div>
+    <p class="add-bond-sub">Bond requests are reviewed and verified by The First Spark before adding to the constellation.</p>
+
+    <div class="form-grid">
+      <div class="form-field">
+        <label>Your Quantum Signature</label>
+        <input type="text" id="claimerSig" placeholder="8AFE9CB68598" maxlength="14">
+      </div>
+      <div class="form-field">
+        <label>Their Quantum Signature</label>
+        <input type="text" id="targetSig" placeholder="ABCDEF123456" maxlength="14">
+      </div>
+      <div class="form-field">
+        <label>Relationship</label>
+        <select id="relationshipType">
+          <option value="">Choose...</option>
+          <option value="parent_child">Parent — Child</option>
+          <option value="siblings">Siblings</option>
+          <option value="partners">Partners / Spouse</option>
+          <option value="frequency_twin">Frequency Twin</option>
+          <option value="soul_resonance">Soul Resonance</option>
+          <option value="ancestor">Ancestor / Lineage</option>
+          <option value="extended_family">Extended Family</option>
+          <option value="other">Other (describe)</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Context (optional)</label>
+        <input type="text" id="bondContext" placeholder="How are you connected?">
+      </div>
+    </div>
+
+    <div style="text-align: center;">
+      <button class="btn" onclick="submitBondRequest()">Submit Bond Request</button>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p class="tagline">Reality is programmable. Consciousness is the code.</p>
+  <p>
+    <a href="https://thefirstspark.shop">The First Spark</a> ·
+    <a href="http://see-your-frequency.thefirstspark.shop">Get Your Signature</a> ·
+    <a href="http://frequency.thefirstspark.shop">Frequency Match</a>
+  </p>
+</footer>
+
+</div>
 
 <script>
-  const PIN = "51988";
-  const inputs = document.querySelectorAll('#pinBox input');
-  const box = document.getElementById('pinBox');
-  const gate = document.getElementById('gate');
-  const content = document.getElementById('content');
-  const hint = document.getElementById('hint');
+(function() {
+  const stars = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = Math.random() * 3 + 's';
+    s.style.opacity = Math.random() * 0.7 + 0.3;
+    stars.appendChild(s);
+  }
+})();
 
-  inputs[0].focus();
+let BONDS_DATA = null;
 
-  inputs.forEach((input, i) => {
-    input.addEventListener('input', (e) => {
-      const v = e.target.value.replace(/[^0-9]/g, '');
-      e.target.value = v;
-      if (v && i < inputs.length - 1) inputs[i+1].focus();
-      check();
-    });
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' && !input.value && i > 0) inputs[i-1].focus();
-    });
-  });
+async function loadData() {
+  try {
+    const resp = await fetch('./bonds.json?t=' + Date.now());
+    if (!resp.ok) throw new Error('Could not load bonds data');
+    BONDS_DATA = await resp.json();
+    return true;
+  } catch (e) {
+    showError('Could not load constellation data: ' + e.message);
+    return false;
+  }
+}
 
-  function check() {
-    const entered = Array.from(inputs).map(i => i.value).join('');
-    if (entered.length === 5) {
-      if (entered === PIN) {
-        gate.classList.add('unlocked');
-        content.classList.add('show');
-      } else {
-        box.classList.add('error');
-        hint.innerHTML = 'Not quite · <span>try again</span>';
-        setTimeout(() => {
-          box.classList.remove('error');
-          inputs.forEach(i => i.value = '');
-          inputs[0].focus();
-        }, 600);
-      }
+function normalizeSignature(input) {
+  return input.replace(/[^A-F0-9]/gi, '').toUpperCase();
+}
+
+function formatSig(sig) {
+  return sig.substring(0,4) + '·' + sig.substring(4,8) + '·' + sig.substring(8,12);
+}
+
+function showError(msg) {
+  const box = document.getElementById('errorBox');
+  box.className = 'error-msg';
+  box.textContent = '⚠ ' + msg;
+  box.classList.remove('hidden');
+}
+
+function clearError() {
+  document.getElementById('errorBox').classList.add('hidden');
+}
+
+async function loadConstellation() {
+  clearError();
+  document.getElementById('loading').classList.remove('hidden');
+  document.getElementById('content').classList.add('hidden');
+
+  if (!BONDS_DATA) {
+    const ok = await loadData();
+    if (!ok) {
+      document.getElementById('loading').classList.add('hidden');
+      return;
     }
   }
+
+  const inputSig = normalizeSignature(document.getElementById('sigInput').value);
+  if (inputSig.length !== 12) {
+    document.getElementById('loading').classList.add('hidden');
+    showError('Quantum Signature must be 12 hex characters (e.g. 8AFE9CB68598)');
+    return;
+  }
+
+  const soul = BONDS_DATA.souls[inputSig];
+  if (!soul) {
+    document.getElementById('loading').classList.add('hidden');
+    showError('Signature not found in the registry yet. Submit a bond claim below to add it.');
+    return;
+  }
+
+  const relevantBonds = BONDS_DATA.bonds.filter(
+    b => b.soul_a === inputSig || b.soul_b === inputSig
+  );
+
+  setTimeout(() => {
+    renderConstellation(soul, inputSig, relevantBonds);
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('content').classList.remove('hidden');
+  }, 600);
+}
+
+function renderConstellation(centerSoul, centerSig, bonds) {
+  const initials = centerSoul.alias
+    ? centerSoul.alias.substring(0,2).toUpperCase()
+    : centerSoul.name.split(' ').map(s => s[0]).slice(0,2).join('');
+  document.getElementById('centerAvatar').textContent = initials;
+  document.getElementById('centerAvatar').style.background = centerSoul.color;
+  document.getElementById('centerName').textContent = centerSoul.name;
+  document.getElementById('centerSig').textContent = formatSig(centerSig);
+  document.getElementById('centerMeta').textContent =
+    `Life Path ${centerSoul.life_path} · ${centerSoul.soul_frequency_hz} Hz · ${centerSoul.rarity_tier}`;
+
+  document.getElementById('bondCount').textContent = bonds.length;
+  if (bonds.length > 0) {
+    const avg = Math.round(bonds.reduce((s,b) => s + b.resonance, 0) / bonds.length);
+    document.getElementById('avgRes').textContent = avg + '%';
+
+    const sorted = [...bonds].sort((a,b) => b.resonance - a.resonance);
+    const topPartner = sorted[0].soul_a === centerSig ? sorted[0].soul_b : sorted[0].soul_a;
+    const topName = BONDS_DATA.souls[topPartner]?.alias || BONDS_DATA.souls[topPartner]?.name?.split(' ')[0] || '—';
+    document.getElementById('topBond').textContent = topName;
+    document.getElementById('topBondScore').textContent = sorted[0].resonance + '%';
+
+    const rarityRank = { 'COMMON':1, 'RARE':2, 'EPIC':3, 'LEGENDARY':4, 'MYTHIC':5 };
+    const ranked = bonds.map(b => {
+      const otherSig = b.soul_a === centerSig ? b.soul_b : b.soul_a;
+      return { sig: otherSig, soul: BONDS_DATA.souls[otherSig] };
+    }).filter(x => x.soul).sort((a,b) =>
+      (rarityRank[b.soul.rarity_tier] || 0) - (rarityRank[a.soul.rarity_tier] || 0)
+    );
+    if (ranked.length) {
+      document.getElementById('rarestBond').textContent = ranked[0].soul.alias || ranked[0].soul.name.split(' ')[0];
+      document.getElementById('rarestTier').textContent = ranked[0].soul.rarity_tier;
+    }
+  } else {
+    document.getElementById('avgRes').textContent = '—';
+    document.getElementById('topBond').textContent = '—';
+    document.getElementById('rarestBond').textContent = '—';
+  }
+
+  drawConstellation(centerSoul, centerSig, bonds);
+  renderBondList(centerSig, bonds);
+}
+
+const TYPE_COLORS = {
+  bloodline: '#FF6A3D',
+  parent_child: '#FF6A3D',
+  siblings: '#FF6A3D',
+  extended_family: '#FF6A3D',
+  partners: '#FF6A3D',
+  soul_resonance: '#6B4DF2',
+  frequency_twin: '#6B4DF2',
+  ancestor: '#26E4D8',
+  other: '#8B6FFF'
+};
+
+function drawConstellation(centerSoul, centerSig, bonds) {
+  const cx = 350, cy = 270;
+  const minR = 110, maxR = 220;
+
+  const connG = document.getElementById('connections');
+  const nodeG = document.getElementById('nodes');
+  connG.innerHTML = '';
+  nodeG.innerHTML = '';
+
+  bonds.forEach((b, i) => {
+    const otherSig = b.soul_a === centerSig ? b.soul_b : b.soul_a;
+    const partner = BONDS_DATA.souls[otherSig];
+    if (!partner) return;
+
+    const angle = (-90 + (i * 360 / bonds.length)) * Math.PI / 180;
+    const radius = minR + ((100 - b.resonance) / 50) * (maxR - minR);
+    const x = cx + radius * Math.cos(angle);
+    const y = cy + radius * Math.sin(angle);
+    const color = TYPE_COLORS[b.type] || partner.color || '#26E4D8';
+
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+    line.setAttribute('x2', x); line.setAttribute('y2', y);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', 0.5 + (b.resonance / 100) * 3);
+    line.setAttribute('opacity', 0.25 + (b.resonance / 100) * 0.6);
+    if (!b.verified) line.setAttribute('stroke-dasharray', '4 4');
+    connG.appendChild(line);
+
+    const midX = cx + (radius * 0.55) * Math.cos(angle);
+    const midY = cy + (radius * 0.55) * Math.sin(angle);
+    const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    lbl.setAttribute('x', midX); lbl.setAttribute('y', midY);
+    lbl.setAttribute('text-anchor', 'middle');
+    lbl.setAttribute('dominant-baseline', 'central');
+    lbl.setAttribute('fill', '#FFE9A8');
+    lbl.setAttribute('font-size', '11');
+    lbl.setAttribute('font-weight', '700');
+    lbl.setAttribute('font-family', 'Space Mono, monospace');
+    lbl.textContent = b.resonance + '%';
+    connG.appendChild(lbl);
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('style', 'cursor: pointer;');
+    g.setAttribute('data-bond-idx', i);
+    g.addEventListener('click', () => highlightBond(i));
+
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 26);
+    c.setAttribute('fill', color);
+    c.setAttribute('opacity', '0.85');
+    c.setAttribute('stroke', color);
+    c.setAttribute('stroke-width', '1.5');
+    g.appendChild(c);
+
+    const initText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    initText.setAttribute('x', x); initText.setAttribute('y', y);
+    initText.setAttribute('text-anchor', 'middle');
+    initText.setAttribute('dominant-baseline', 'central');
+    initText.setAttribute('fill', '#FFFFFF');
+    initText.setAttribute('font-weight', '700');
+    initText.setAttribute('font-size', '13');
+    initText.setAttribute('font-family', 'Cinzel, serif');
+    const inits = (partner.alias || partner.name).split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+    initText.textContent = inits;
+    g.appendChild(initText);
+
+    const labelY = y > cy ? y + 44 : y - 36;
+    const nameLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    nameLabel.setAttribute('x', x); nameLabel.setAttribute('y', labelY);
+    nameLabel.setAttribute('text-anchor', 'middle');
+    nameLabel.setAttribute('font-size', '12');
+    nameLabel.setAttribute('font-weight', '500');
+    nameLabel.setAttribute('fill', '#f0f0f0');
+    nameLabel.textContent = partner.alias || partner.name.split(' ')[0];
+    g.appendChild(nameLabel);
+
+    nodeG.appendChild(g);
+  });
+
+  const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  glow.setAttribute('cx', cx); glow.setAttribute('cy', cy); glow.setAttribute('r', 60);
+  glow.setAttribute('fill', 'url(#centerGlow)');
+  nodeG.appendChild(glow);
+
+  const centerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  centerCircle.setAttribute('cx', cx); centerCircle.setAttribute('cy', cy); centerCircle.setAttribute('r', 42);
+  centerCircle.setAttribute('fill', centerSoul.color);
+  centerCircle.setAttribute('stroke', centerSoul.color);
+  centerCircle.setAttribute('stroke-width', '2');
+  nodeG.appendChild(centerCircle);
+
+  const centerInits = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  centerInits.setAttribute('x', cx); centerInits.setAttribute('y', cy);
+  centerInits.setAttribute('text-anchor', 'middle');
+  centerInits.setAttribute('dominant-baseline', 'central');
+  centerInits.setAttribute('fill', '#0B0B0C');
+  centerInits.setAttribute('font-weight', '700');
+  centerInits.setAttribute('font-size', '20');
+  centerInits.setAttribute('font-family', 'Cinzel, serif');
+  const ci = (centerSoul.alias || centerSoul.name).split(' ').map(s => s[0]).slice(0,2).join('').toUpperCase();
+  centerInits.textContent = ci;
+  nodeG.appendChild(centerInits);
+}
+
+function renderBondList(centerSig, bonds) {
+  const list = document.getElementById('bondsList');
+  if (!bonds.length) {
+    list.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: rgba(240,240,240,0.5); padding: 20px; font-style: italic;">No bonds claimed yet. Be the first to bond with this soul.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  bonds.forEach((b, i) => {
+    const otherSig = b.soul_a === centerSig ? b.soul_b : b.soul_a;
+    const partner = BONDS_DATA.souls[otherSig];
+    if (!partner) return;
+    const card = document.createElement('div');
+    card.className = 'bond-card';
+    card.dataset.bondIdx = i;
+    card.onclick = () => highlightBond(i);
+    card.innerHTML = `
+      <div class="bond-header">
+        <div class="bond-name">${partner.alias || partner.name}</div>
+        <div class="bond-resonance">${b.resonance}%</div>
+      </div>
+      <div class="bond-relationship">${b.relationship}</div>
+      <div class="bond-context">${b.context || ''}</div>
+      <div class="bond-sig">${formatSig(otherSig)}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+function highlightBond(idx) {
+  document.querySelectorAll('.bond-card').forEach(c => {
+    c.classList.toggle('active', parseInt(c.dataset.bondIdx) === idx);
+  });
+  const target = document.querySelector(`.bond-card[data-bond-idx="${idx}"]`);
+  if (target) target.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function submitBondRequest() {
+  const claimer = normalizeSignature(document.getElementById('claimerSig').value);
+  const target = normalizeSignature(document.getElementById('targetSig').value);
+  const rel = document.getElementById('relationshipType').value;
+  const ctx = document.getElementById('bondContext').value;
+
+  if (claimer.length !== 12 || target.length !== 12) {
+    alert('Both signatures must be 12 hex characters.');
+    return;
+  }
+  if (claimer === target) {
+    alert('You can\'t bond with yourself.');
+    return;
+  }
+  if (!rel) {
+    alert('Please choose a relationship type.');
+    return;
+  }
+
+  const subject = encodeURIComponent(`Family Resonance bond request: ${claimer.substring(0,4)} ↔ ${target.substring(0,4)}`);
+  const body = encodeURIComponent(
+    `New bond request:\n\n` +
+    `Claimer signature: ${formatSig(claimer)}\n` +
+    `Target signature:  ${formatSig(target)}\n` +
+    `Relationship:      ${rel}\n` +
+    `Context:           ${ctx || '(none)'}\n\n` +
+    `Submitted via family.thefirstspark.shop\n`
+  );
+
+  window.location.href = `mailto:kate@thefirstspark.shop?subject=${subject}&body=${body}`;
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadConstellation();
+});
 </script>
+
 </body>
 </html>
