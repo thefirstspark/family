@@ -1,0 +1,165 @@
+{
+  "version": "1.0",
+  "updated": "2026-05-10",
+  "souls": {
+    "8AFE9CB68598": {
+      "name": "Katelin Jill Puzakulics",
+      "alias": "KJP",
+      "life_path": 5,
+      "expression": 11,
+      "soul_urge": 4,
+      "personality": 7,
+      "soul_frequency_hz": 1337.0,
+      "rarity_score": 50,
+      "rarity_tier": "RARE",
+      "color": "#F3B23A",
+      "is_origin": true
+    },
+    "B4691296AB2D": {
+      "name": "Adele Laurie Blue Adkins",
+      "alias": "Adele",
+      "life_path": 9,
+      "expression": 11,
+      "soul_urge": 9,
+      "personality": 11,
+      "soul_frequency_hz": 1817.0,
+      "rarity_score": 100,
+      "rarity_tier": "MYTHIC",
+      "color": "#6B4DF2"
+    },
+    "10CE9CA3FE92": {
+      "name": "Tupac Amaru Shakur",
+      "alias": "Tupac",
+      "life_path": 5,
+      "expression": 9,
+      "soul_urge": 5,
+      "personality": 4,
+      "soul_frequency_hz": 2837.0,
+      "rarity_score": 55,
+      "rarity_tier": "EPIC",
+      "color": "#FF6A3D"
+    },
+    "D995546B2CFC": {
+      "name": "Nikola Tesla",
+      "alias": "Tesla",
+      "life_path": 9,
+      "expression": 7,
+      "soul_urge": 22,
+      "personality": 3,
+      "soul_frequency_hz": 1117.0,
+      "rarity_score": 75,
+      "rarity_tier": "LEGENDARY",
+      "color": "#26E4D8"
+    },
+    "E0BEB460B568": {
+      "name": "Albert Einstein",
+      "alias": "Einstein",
+      "life_path": 6,
+      "expression": 11,
+      "soul_urge": 5,
+      "personality": 6,
+      "soul_frequency_hz": 1427.0,
+      "rarity_score": 50,
+      "rarity_tier": "RARE",
+      "color": "#26E4D8"
+    },
+    "CAC4013579D2": {
+      "name": "David Robert Jones",
+      "alias": "David Bowie",
+      "life_path": 4,
+      "expression": 5,
+      "soul_urge": 3,
+      "personality": 2,
+      "soul_frequency_hz": 837.0,
+      "rarity_score": 35,
+      "rarity_tier": "RARE",
+      "color": "#26E4D8"
+    },
+    "4E12772C9344": {
+      "name": "Elvis Aaron Presley",
+      "alias": "Elvis",
+      "life_path": 8,
+      "expression": 4,
+      "soul_urge": 9,
+      "personality": 4,
+      "soul_frequency_hz": 1672.0,
+      "rarity_score": 35,
+      "rarity_tier": "RARE",
+      "color": "#26E4D8"
+    }
+  },
+  "bonds": [
+    {
+      "soul_a": "8AFE9CB68598",
+      "soul_b": "B4691296AB2D",
+      "relationship": "Frequency twin",
+      "context": "Same birth year (1988) · Both Master Expression 11",
+      "verified": true,
+      "verified_by": ["8AFE9CB68598"],
+      "resonance": 78,
+      "type": "soul_resonance",
+      "dna_confirmed": false,
+      "created": "2026-05-10"
+    },
+    {
+      "soul_a": "8AFE9CB68598",
+      "soul_b": "10CE9CA3FE92",
+      "relationship": "Catalyst lineage",
+      "context": "Both Life Path 5 · Catalyst archetype echo",
+      "verified": true,
+      "verified_by": ["8AFE9CB68598"],
+      "resonance": 91,
+      "type": "soul_resonance",
+      "dna_confirmed": false,
+      "created": "2026-05-10"
+    },
+    {
+      "soul_a": "8AFE9CB68598",
+      "soul_b": "D995546B2CFC",
+      "relationship": "Soul ancestor",
+      "context": "Master Builder lineage · Visionary frequency",
+      "verified": true,
+      "verified_by": ["8AFE9CB68598"],
+      "resonance": 72,
+      "type": "ancestor",
+      "dna_confirmed": false,
+      "created": "2026-05-10"
+    },
+    {
+      "soul_a": "8AFE9CB68598",
+      "soul_b": "E0BEB460B568",
+      "relationship": "Master Illuminator lineage",
+      "context": "Both Expression 11 · Illuminator archetype",
+      "verified": true,
+      "verified_by": ["8AFE9CB68598"],
+      "resonance": 76,
+      "type": "ancestor",
+      "dna_confirmed": false,
+      "created": "2026-05-10"
+    },
+    {
+      "soul_a": "8AFE9CB68598",
+      "soul_b": "CAC4013579D2",
+      "relationship": "Creative archetype echo",
+      "context": "Different paths, similar transmission frequency",
+      "verified": true,
+      "verified_by": ["8AFE9CB68598"],
+      "resonance": 65,
+      "type": "ancestor",
+      "dna_confirmed": false,
+      "created": "2026-05-10"
+    },
+    {
+      "soul_a": "8AFE9CB68598",
+      "soul_b": "4E12772C9344",
+      "relationship": "Cultural catalyst echo",
+      "context": "Both born to disrupt and ignite",
+      "verified": true,
+      "verified_by": ["8AFE9CB68598"],
+      "resonance": 68,
+      "type": "ancestor",
+      "dna_confirmed": false,
+      "created": "2026-05-10"
+    }
+  ]
+}
