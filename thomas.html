@@ -207,14 +207,15 @@ const MOON = '#F0F0FF';
 const P = {
   michael: { name: 'Michael Andrew Puzakulics', first: 'Michael', dob: '1923-09-19', rel: 'Your father', q: 'E50A2DCC8DE1', hz: 702.0,  tier: 'ember',  core: [7, 3, 1, 11, 1], ancestor: true,
              note: 'Ember — The First Heat. The spark the whole line catches from. You carry his Life Path 7.' },
-  maureen: { name: 'Maureen Vivian McCaffrey', first: 'Maureen', dob: '1923-12-11', rel: 'Your mother', q: '1F1E104DDA64', hz: 696.47, tier: 'red',    core: [2, 9, 3, 6, 11], master: 11, ancestor: true,
+  maureen: { name: 'Maureen Vivian Puzakulics', first: 'Maureen', dob: '1923-12-11', rel: 'Your mother', q: '1F1E104DDA64', hz: 696.47, tier: 'violet', core: [2, 5, 4, 1, 11], ancestor: true,
              born: 'Born Monica Frost',
-             note: 'She came into the world as Monica Frost and was adopted as Maureen. The name changed; the inner clock she arrived with never did. Her Radiant lands on Master 11, so her red is lit with Moonsilver.' },
+             cardNote: 'Her Soul Card was minted under her maiden name, Maureen Vivian McCaffrey.',
+             note: 'She came into the world as Monica Frost, was adopted as Maureen McCaffrey, and married into Puzakulics. Three names; one inner clock that never changed. The name she wore with you is Violet — The Transformer.' },
   thomas:  { name: 'Thomas William Puzakulics', first: 'Thomas', dob: '1966-02-28', rel: 'You', q: '0F042BCC0EAB', hz: 551.75, tier: 'green', core: [7, 6, 6, 9, 1], center: true,
              note: 'Green — The Field. The ground everything else in this sky grows from. Life Path 7 like your father, Birthday 1 like him too — and you handed that 1 straight to Katelin.' },
   dawn:    { name: 'Dawn Renee Puzakulics', first: 'Dawn', dob: '1965-02-21', rel: 'Your wife', pname: 'Dawn Renee Sheeler', q: 'A0397193DA85', hz: 914.46, tier: 'violet', core: [8, 8, 4, 4, 3],
              born: 'Born Dawn Renee Sheeler', skyBorn: 'née sheeler',
-             note: 'Violet — The Transformer, the same color as Katelin. Life Path 8 and Expression 8: a double 8, the builder of what lasts. Born one year and one week before you.' },
+             note: 'Violet — The Transformer, the same color as your mother and Katelin. Life Path 8 and Expression 8: a double 8, the builder of what lasts. Born one year and one week before you.' },
   katelin: { name: 'Katelin Jill Puzakulics', first: 'Katelin', dob: '1988-05-19', rel: 'Your daughter', q: 'E1855DD782A3', hz: 824.43, tier: 'violet', core: [5, 11, 4, 7, 1], founder: 'Player One',
              note: 'Violet — The Transformer. Player One. Expression 11 — the master number that runs through this family — and your Birthday 1.' },
   joshua:  { name: 'Joshua Thomas Puzakulics', first: 'Josh', dob: '2000-10-26', rel: 'Your son', q: '9D727E24EA3A', hz: 1209.6, tier: 'gold', core: [11, 1, 33, 4, 8], twin: 'jacob',
@@ -356,6 +357,7 @@ function select(id, fromTap) {
     ${twinNote}
     <div class="nums">${p.core.map((n, i) => `<div class="num${isMaster(n) ? ' master' : ''}"><b>${n}</b><span>${CORE_LABELS[i]}</span></div>`).join('')}</div>
     ${p.q ? `<div class="meta"><span>◆ ${qd}</span><span>${p.hz.toFixed(2)} Hz</span></div>` : ''}
+    ${p.cardNote ? `<div class="meta"><span>${p.cardNote}</span></div>` : ''}
     ${p.q ? `<a class="btn" href="https://soul-maps.thefirstspark.shop/card.html?id=${p.q}" target="_blank" rel="noopener">OPEN SOUL CARD</a>` : ''}
     ${id !== 'thomas' ? `<a class="btn ghost" href="#" data-back>BACK TO YOU</a>` : ''}
   `;
@@ -412,9 +414,9 @@ loadEngine().then(() => select(currentId)).catch(e => console.warn('Soul pattern
 // Echoes — patterns that repeat across the line (all read from the numbers above).
 const ECHOES = [
   { c: MOON, t: 'The 11 runs through five of nine stars',
-    b: 'Michael (Personality 11), Maureen (Radiant 11), Katelin (Expression 11), and both twins (Life Path 11). You stand at the center of all of it.' },
-  { c: TIER.violet.hex, t: 'Two Transformers',
-    b: 'Dawn and Katelin burn the same color: Violet, The Transformer.' },
+    b: 'Michael (Personality 11), Maureen (Birthday 11), Katelin (Expression 11), and both twins (Life Path 11). You stand at the center of all of it.' },
+  { c: TIER.violet.hex, t: 'Three Transformers',
+    b: 'Your mother, your wife, and your daughter all burn the same color: Violet, The Transformer.' },
   { c: TIER.green.hex, t: 'Father to son: Life Path 7',
     b: 'Michael and Thomas walk the same road number — the seeker, the one who thinks it through.' },
   { c: TIER.ember.hex, t: 'Birthday 1, three generations',
@@ -424,7 +426,7 @@ const ECHOES = [
   { c: TIER.gold.hex, t: 'Two clocks, one birthday',
     b: 'Josh and Jacob share a birth date, so they share an inner clock. Their names set their outer light — Gold and Rose. Fraternal, and it shows.' },
   { c: TIER.red.tint, t: 'Monica → Maureen',
-    b: 'Your mother was born Monica Frost. A name can change; the day you arrive never does.' }
+    b: 'Your mother was born Monica Frost, then Maureen McCaffrey, then Maureen Puzakulics. A name can change; the day you arrive never does.' }
 ];
 document.getElementById('echoes').innerHTML = ECHOES.map(e =>
   `<div class="echo" style="--c:${e.c}"><b>${e.t.toUpperCase()}</b>${e.b}</div>`).join('');
