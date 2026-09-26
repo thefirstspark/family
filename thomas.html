@@ -194,8 +194,8 @@ const TIER = {
 };
 const MOON = '#F0F0FF';
 
-// Numbers from the soul map registry (signatures.json). Dawn is not minted —
-// her numbers come from the live engine run on her name + date, no card.
+// Numbers from the soul map registry (signatures.json). Dawn and Maureen are
+// minted under their birth/adoptive names; that record is their card.
 const P = {
   michael: { name: 'Michael Andrew Puzakulics', first: 'Michael', dob: '1923-09-19', rel: 'Your father', q: 'E50A2DCC8DE1', hz: 702.0,  tier: 'ember',  core: [7, 3, 1, 11, 1], ancestor: true,
              note: 'Ember — The First Heat. The spark the whole line catches from. You carry his Life Path 7.' },
@@ -204,8 +204,9 @@ const P = {
              note: 'She came into the world as Monica Frost and was adopted as Maureen. The name changed; the inner clock she arrived with never did. Her Radiant lands on Master 11, so her red is lit with Moonsilver.' },
   thomas:  { name: 'Thomas William Puzakulics', first: 'Thomas', dob: '1966-02-28', rel: 'You', q: '0F042BCC0EAB', hz: 551.75, tier: 'green', core: [7, 6, 6, 9, 1], center: true,
              note: 'Green — The Field. The ground everything else in this sky grows from. Life Path 7 like your father, Birthday 1 like him too — and you handed that 1 straight to Katelin.' },
-  dawn:    { name: 'Dawn Renee Puzakulics', first: 'Dawn', dob: '1965-02-21', rel: 'Your wife', tier: 'red', core: [8, 3, 5, 7, 3], master: 11,
-             note: 'Red — The Will, lit with Moonsilver: her Radiant lands on Master 11, the same light your mother carried. Born one year and one week before you.' },
+  dawn:    { name: 'Dawn Renee Puzakulics', first: 'Dawn', dob: '1965-02-21', rel: 'Your wife', q: 'A0397193DA85', hz: 914.46, tier: 'violet', core: [8, 8, 4, 4, 3],
+             born: 'Born Dawn Renee Sheeler', skyBorn: 'née sheeler',
+             note: 'Violet — The Transformer, the same color as Katelin. Life Path 8 and Expression 8: a double 8, the builder of what lasts. Born one year and one week before you.' },
   katelin: { name: 'Katelin Jill Puzakulics', first: 'Katelin', dob: '1988-05-19', rel: 'Your daughter', q: 'E1855DD782A3', hz: 824.43, tier: 'violet', core: [5, 11, 4, 7, 1], founder: 'Player One',
              note: 'Violet — The Transformer. Player One. Expression 11 — the master number that runs through this family — and your Birthday 1.' },
   joshua:  { name: 'Joshua Thomas Puzakulics', first: 'Josh', dob: '2000-10-26', rel: 'Your son', q: '9D727E24EA3A', hz: 1209.6, tier: 'gold', core: [11, 1, 33, 4, 8], twin: 'jacob',
@@ -285,7 +286,7 @@ function drawStar(id) {
   const ty = r + 20;
   el('text', { class: 'name', y: ty, 'text-anchor': 'middle' }, g).textContent = p.first.toUpperCase();
   el('text', { class: 'role', y: ty + 13, 'text-anchor': 'middle', fill: c }, g).textContent = TIER[p.tier].role;
-  if (p.born) el('text', { class: 'role', y: ty + 25, 'text-anchor': 'middle', fill: 'rgba(255,255,255,0.45)' }, g).textContent = p.born.toLowerCase();
+  if (p.born) el('text', { class: 'role', y: ty + 25, 'text-anchor': 'middle', fill: 'rgba(255,255,255,0.45)' }, g).textContent = p.skyBorn || p.born.toLowerCase();
   g.addEventListener('click', () => select(id));
   g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(id); } });
   starEls[id] = g;
@@ -355,8 +356,10 @@ select('thomas');
 
 // Echoes — patterns that repeat across the line (all read from the numbers above).
 const ECHOES = [
-  { c: MOON, t: 'The 11 runs through six of nine stars',
-    b: 'Michael (Personality 11), Maureen and Dawn (Radiant 11), Katelin (Expression 11), and both twins (Life Path 11). You stand at the center of all of it.' },
+  { c: MOON, t: 'The 11 runs through five of nine stars',
+    b: 'Michael (Personality 11), Maureen (Radiant 11), Katelin (Expression 11), and both twins (Life Path 11). You stand at the center of all of it.' },
+  { c: TIER.violet.hex, t: 'Two Transformers',
+    b: 'Dawn and Katelin burn the same color: Violet, The Transformer.' },
   { c: TIER.green.hex, t: 'Father to son: Life Path 7',
     b: 'Michael and Thomas walk the same road number — the seeker, the one who thinks it through.' },
   { c: TIER.ember.hex, t: 'Birthday 1, three generations',
