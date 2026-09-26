@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#050508">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Tom's Sky">
+<title>Tom's Sky — The Puzakulics Constellation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #050508;
+  --spark: #fbbf24;
+  --moon: #f0f0ff;
+  --dim: rgba(255,255,255,0.55);
+  --faint: rgba(255,255,255,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--void); color: #fff; }
+body {
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+#stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.aurora {
+  position: fixed; inset: -20% -20% auto; height: 70vh; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(16,185,129,0.16), transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(139,92,246,0.14), transparent 60%);
+  filter: blur(40px);
+}
+main { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; padding: 28px 16px 80px; }
+
+header { text-align: center; margin-bottom: 8px; }
+.eyebrow {
+  font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.35em;
+  color: var(--spark); text-transform: uppercase;
+}
+h1 {
+  font-family: 'Orbitron', sans-serif; font-weight: 900;
+  font-size: clamp(34px, 10vw, 52px); letter-spacing: 0.04em; margin: 10px 0 6px;
+  background: linear-gradient(180deg, #fff 30%, #9ff5d4);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  text-shadow: 0 0 40px rgba(16,185,129,0.25);
+}
+.sub { color: var(--dim); font-size: 13px; }
+
+.sky-wrap { position: relative; margin: 10px -8px 0; }
+svg#sky { width: 100%; height: auto; display: block; overflow: visible; }
+.hint { text-align: center; color: var(--dim); font-size: 12px; margin-top: 4px; letter-spacing: 0.08em; }
+
+.star { cursor: pointer; }
+.star .hit { fill: transparent; }
+.star text { pointer-events: none; }
+.star:focus { outline: none; }
+.star:focus-visible .core { stroke: #fff; stroke-width: 2; }
+.name { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px; fill: #fff; letter-spacing: 0.06em; }
+.role { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; }
+.gen { font-family: 'Orbitron', sans-serif; font-size: 8px; letter-spacing: 0.3em; fill: rgba(255,255,255,0.28); }
+.star.active .core { stroke: #fff; stroke-width: 2.5; }
+
+/* Panel */
+.panel {
+  position: relative; margin-top: 18px;
+  border: 1px solid var(--faint); border-radius: 18px; padding: 22px 20px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+  box-shadow: 0 0 40px var(--glow, rgba(16,185,129,0.15));
+  transition: box-shadow .4s;
+}
+.panel .rel { font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.3em; color: var(--c, #10b981); text-transform: uppercase; }
+.panel h2 { font-family: 'Orbitron', sans-serif; font-size: 22px; margin: 8px 0 4px; line-height: 1.25; }
+.panel .born { color: var(--dim); font-size: 12px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 4px;
+  padding: 7px 14px; border-radius: 999px; font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.12em;
+  border: 1px solid var(--c); color: var(--c); background: rgba(0,0,0,0.3);
+}
+.pill .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.moonline { font-size: 11px; color: var(--moon); letter-spacing: 0.1em; margin-top: 6px; opacity: 0.85; }
+.note { margin: 16px 0 4px; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.88); }
+.nums { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 18px; }
+.num {
+  text-align: center; padding: 10px 2px 8px; border-radius: 12px;
+  border: 1px solid var(--faint); background: rgba(0,0,0,0.25);
+}
+.num b { display: block; font-family: 'Orbitron', sans-serif; font-size: 20px; }
+.num span { display: block; font-size: 8px; letter-spacing: 0.08em; color: var(--dim); margin-top: 4px; text-transform: uppercase; }
+.num.master { border-color: rgba(240,240,255,0.7); box-shadow: 0 0 14px rgba(240,240,255,0.25) inset; }
+.num.master b { color: var(--moon); }
+.meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: 14px; font-size: 11px; color: var(--dim); }
+.btn {
+  display: inline-block; margin-top: 18px; padding: 12px 20px; border-radius: 999px;
+  background: var(--spark); color: #1a1200; text-decoration: none;
+  font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.12em;
+  box-shadow: 0 0 24px rgba(251,191,36,0.35);
+}
+.btn.ghost { background: transparent; color: #fff; border: 1px solid var(--faint); box-shadow: none; margin-left: 6px; }
+
+section.block { margin-top: 34px; }
+section.block h3 {
+  font-family: 'Orbitron', sans-serif; font-size: 12px; letter-spacing: 0.3em; color: var(--spark);
+  text-transform: uppercase; margin-bottom: 14px; text-align: center;
+}
+.echo {
+  border-left: 2px solid var(--c, var(--spark)); padding: 10px 14px; margin-bottom: 12px;
+  background: rgba(255,255,255,0.025); border-radius: 0 12px 12px 0;
+  font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.86);
+}
+.echo b { font-family: 'Orbitron', sans-serif; font-size: 11px; letter-spacing: 0.12em; display: block; margin-bottom: 4px; color: var(--c, var(--spark)); }
+.bday {
+  display: flex; align-items: center; gap: 12px; padding: 12px 14px; margin-bottom: 8px;
+  border: 1px solid var(--faint); border-radius: 14px; background: rgba(255,255,255,0.02);
+}
+.bday .dot { width: 12px; height: 12px; border-radius: 50%; flex: 0 0 12px; }
+.bday .who { flex: 1; font-size: 13px; }
+.bday .who small { display: block; color: var(--dim); font-size: 11px; margin-top: 2px; }
+.bday .days { font-family: 'Orbitron', sans-serif; font-size: 18px; text-align: right; }
+.bday .days small { display: block; font-size: 9px; letter-spacing: 0.15em; color: var(--dim); }
+.bday.today { border-color: var(--spark); box-shadow: 0 0 24px rgba(251,191,36,0.3); }
+
+footer { text-align: center; margin-top: 44px; color: var(--dim); font-size: 12px; line-height: 1.8; }
+footer .sig { font-family: 'Orbitron', sans-serif; color: var(--spark); letter-spacing: 0.2em; font-size: 11px; }
+
+@media (prefers-reduced-motion: reduce) { .panel { transition: none; } }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="aurora"></div>
+
+<main>
+  <header>
+    <div class="eyebrow">★ For Dad ★</div>
+    <h1>TOM'S SKY</h1>
+    <p class="sub">The Puzakulics Constellation — every star here traces back to you.</p>
+  </header>
+
+  <div class="sky-wrap">
+    <svg id="sky" viewBox="0 0 400 700" role="img" aria-label="Family constellation centered on Thomas">
+      <defs>
+        <filter id="glow" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <radialGradient id="centerHalo">
+          <stop offset="0%" stop-color="#10b981" stop-opacity="0.28"/>
+          <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <g id="rings"></g>
+      <g id="links"></g>
+      <g id="nodes"></g>
+    </svg>
+    <p class="hint">TAP ANY STAR</p>
+  </div>
+
+  <div class="panel" id="panel" aria-live="polite"></div>
+
+  <section class="block">
+    <h3>Echoes in the line</h3>
+    <div id="echoes"></div>
+  </section>
+
+  <section class="block">
+    <h3>Next birthdays</h3>
+    <div id="bdays"></div>
+  </section>
+
+  <footer>
+    <div class="sig">WITH LOVE · KATELIN</div>
+    Colors and numbers come from each person's Soul Map.<br>
+    Add this page to your home screen to keep your sky close.
+  </footer>
+</main>
+
+<script>
+// Tier palette (Color Codex, DL-014): masters are a tint, not a tier.
+const TIER = {
+  ember:  { hex: '#ff6a3d', role: 'The First Heat', label: 'Ember' },
+  red:    { hex: '#e24b4a', role: 'The Will',        label: 'Red',    tint: '#ec8a89' },
+  gold:   { hex: '#d4af37', role: 'The Orchestrator', label: 'Gold' },
+  green:  { hex: '#10b981', role: 'The Field',       label: 'Green',  tint: '#64d2ad' },
+  cyan:   { hex: '#22d3ee', role: 'The Signal',      label: 'Cyan' },
+  blue:   { hex: '#3b82f6', role: 'The Mind',        label: 'Blue',   tint: '#80aef9' },
+  violet: { hex: '#8b5cf6', role: 'The Transformer', label: 'Violet' },
+  rose:   { hex: '#f43f5e', role: 'The Bond',        label: 'Rose' },
+  white:  { hex: '#f0f0ff', role: 'The All',         label: 'White' }
+};
+const MOON = '#F0F0FF';
+
+// Numbers from the soul map registry (signatures.json). Dawn is not minted —
+// her numbers come from the live engine run on her name + date, no card.
+const P = {
+  michael: { name: 'Michael Andrew Puzakulics', first: 'Michael', dob: '1923-09-19', rel: 'Your father', q: 'E50A2DCC8DE1', hz: 702.0,  tier: 'ember',  core: [7, 3, 1, 11, 1], ancestor: true,
+             note: 'Ember — The First Heat. The spark the whole line catches from. You carry his Life Path 7.' },
+  maureen: { name: 'Maureen Vivian McCaffrey', first: 'Maureen', dob: '1923-12-11', rel: 'Your mother', q: '1F1E104DDA64', hz: 696.47, tier: 'red',    core: [2, 9, 3, 6, 11], master: 11, ancestor: true,
+             born: 'Born Monica Frost',
+             note: 'She came into the world as Monica Frost and was adopted as Maureen. The name changed; the inner clock she arrived with never did. Her Radiant lands on Master 11, so her red is lit with Moonsilver.' },
+  thomas:  { name: 'Thomas William Puzakulics', first: 'Thomas', dob: '1966-02-28', rel: 'You', q: '0F042BCC0EAB', hz: 551.75, tier: 'green', core: [7, 6, 6, 9, 1], center: true,
+             note: 'Green — The Field. The ground everything else in this sky grows from. Life Path 7 like your father, Birthday 1 like him too — and you handed that 1 straight to Katelin.' },
+  dawn:    { name: 'Dawn Renee Puzakulics', first: 'Dawn', dob: '1965-02-21', rel: 'Your wife', tier: 'red', core: [8, 3, 5, 7, 3], master: 11,
+             note: 'Red — The Will, lit with Moonsilver: her Radiant lands on Master 11, the same light your mother carried. Born one year and one week before you.' },
+  katelin: { name: 'Katelin Jill Puzakulics', first: 'Katelin', dob: '1988-05-19', rel: 'Your daughter', q: 'E1855DD782A3', hz: 824.43, tier: 'violet', core: [5, 11, 4, 7, 1], founder: 'Player One',
+             note: 'Violet — The Transformer. Player One. Expression 11 — the master number that runs through this family — and your Birthday 1.' },
+  joshua:  { name: 'Joshua Thomas Puzakulics', first: 'Josh', dob: '2000-10-26', rel: 'Your son', q: '9D727E24EA3A', hz: 1209.6, tier: 'gold', core: [11, 1, 33, 4, 8], twin: 'jacob',
+             note: 'Gold — The Orchestrator. Life Path 11 and Soul Urge 33: two master numbers in one chart. He carries your name in the middle of his.' },
+  jacob:   { name: 'Jacob William Puzakulics', first: 'Jacob', dob: '2000-10-26', rel: 'Your son', q: '23C65645182F', hz: 792.98, tier: 'rose', core: [11, 6, 6, 9, 8], twin: 'joshua',
+             note: 'Rose — The Bond. Life Path 11 like his brother. And his name code — Expression 6, Soul Urge 6, Personality 9 — is exactly yours. Jacob William carries Thomas William.' },
+  devon:   { name: 'Devon Ray Lehman', first: 'Devon', dob: '2005-12-27', rel: 'Your grandson', q: 'AA9D32F1999F', hz: 623.98, tier: 'cyan', core: [1, 4, 9, 4, 9], founder: 'Player Two',
+             note: 'Cyan — The Signal. Player Two. Life Path 1 — the first-born of the next generation of your sky.' },
+  mason:   { name: 'Mason Wade Roberts', first: 'Mason', dob: '2011-04-22', rel: 'Your grandson', q: 'EB1EBC3C789F', hz: 768.96, tier: 'blue', core: [3, 3, 6, 6, 22], founder: 'Player Three',
+             note: 'Blue — The Mind. Player Three. Born on a 22, a master day, and Soul Urge 6 — the same heart number as you.' }
+};
+const CORE_LABELS = ['Life Path', 'Expression', 'Soul Urge', 'Personality', 'Birthday'];
+const isMaster = n => n === 11 || n === 22 || n === 33;
+
+// Layout (viewBox 400×700): ancestors → Thomas & Dawn → children → grandchildren.
+const POS = {
+  michael: [135, 88],  maureen: [265, 88],
+  thomas:  [165, 262], dawn:    [292, 262],
+  katelin: [88, 452],
+  devon:   [48, 626],  mason:   [138, 626]
+};
+const TWIN_C = [285, 460], TWIN_R = 52, TWIN_TILT = 0.3;
+const RADIUS = { thomas: 17, michael: 11, maureen: 11, dawn: 12 };
+const SVGNS = 'http://www.w3.org/2000/svg';
+const el = (tag, attrs = {}, parent) => {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+};
+const colorOf = id => { const p = P[id], t = TIER[p.tier]; return p.master && t.tint ? t.tint : t.hex; };
+
+const rings = document.getElementById('rings');
+const links = document.getElementById('links');
+const nodes = document.getElementById('nodes');
+
+// Soft halo + orbit rings around Thomas
+el('circle', { cx: POS.thomas[0], cy: POS.thomas[1], r: 120, fill: 'url(#centerHalo)' }, rings);
+[70, 190, 330].forEach((r, i) => el('circle', {
+  cx: POS.thomas[0], cy: POS.thomas[1], r, fill: 'none',
+  stroke: 'rgba(255,255,255,' + (0.07 - i * 0.015) + ')', 'stroke-dasharray': '2 6'
+}, rings));
+el('text', { x: 200, y: 30,  'text-anchor': 'middle', class: 'gen' }, rings).textContent = 'YOUR PARENTS';
+el('text', { x: 200, y: 372, 'text-anchor': 'middle', class: 'gen' }, rings).textContent = 'YOUR CHILDREN';
+el('text', { x: 93,  y: 690, 'text-anchor': 'middle', class: 'gen' }, rings).textContent = 'GRANDCHILDREN';
+
+function line(a, b, opts = {}) {
+  return el('line', {
+    x1: a[0], y1: a[1], x2: b[0], y2: b[1],
+    stroke: opts.stroke || 'rgba(255,255,255,0.28)', 'stroke-width': opts.w || 1,
+    'stroke-dasharray': opts.dash || ''
+  }, links);
+}
+const mid = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+
+// Partner lines + descent lines
+line(POS.michael, POS.maureen, { stroke: 'rgba(255,255,255,0.35)' });
+line(mid(POS.michael, POS.maureen), POS.thomas, { stroke: 'rgba(255,255,255,0.35)' });
+line(POS.thomas, POS.dawn, { stroke: 'rgba(255,255,255,0.35)' });
+line(POS.thomas, POS.katelin);
+line(mid(POS.thomas, POS.dawn), TWIN_C);
+line(POS.katelin, POS.devon);
+line(POS.katelin, POS.mason);
+el('ellipse', { cx: TWIN_C[0], cy: TWIN_C[1], rx: TWIN_R, ry: TWIN_R * 0.3, fill: 'none', stroke: 'rgba(255,255,255,0.18)', 'stroke-dasharray': '1 4' }, links);
+const twinBond = el('line', { stroke: 'rgba(255,255,255,0.4)', 'stroke-width': 1 }, links);
+
+// Stars
+const starEls = {};
+function drawStar(id) {
+  const p = P[id], c = colorOf(id), r = RADIUS[id] || 10;
+  const g = el('g', { class: 'star', tabindex: 0, role: 'button', 'aria-label': p.first + ', ' + p.rel }, nodes);
+  el('circle', { class: 'hit', r: 30 }, g);
+  if (p.master) el('circle', { r: r + 6, fill: 'none', stroke: MOON, 'stroke-width': 1.2, opacity: 0.85 }, g);
+  if (p.founder) el('circle', { r: r + (p.master ? 10 : 6), fill: 'none', stroke: '#d4af37', 'stroke-width': 1, 'stroke-dasharray': '3 3' }, g);
+  el('circle', { class: 'core', r, fill: c, filter: 'url(#glow)' }, g);
+  el('circle', { r: r * 0.38, fill: '#fff', opacity: 0.9 }, g);
+  const ty = r + 20;
+  el('text', { class: 'name', y: ty, 'text-anchor': 'middle' }, g).textContent = p.first.toUpperCase();
+  el('text', { class: 'role', y: ty + 13, 'text-anchor': 'middle', fill: c }, g).textContent = TIER[p.tier].role;
+  if (p.born) el('text', { class: 'role', y: ty + 25, 'text-anchor': 'middle', fill: 'rgba(255,255,255,0.45)' }, g).textContent = p.born.toLowerCase();
+  g.addEventListener('click', () => select(id));
+  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(id); } });
+  starEls[id] = g;
+  return g;
+}
+Object.keys(P).forEach(drawStar);
+const place = (id, x, y) => starEls[id].setAttribute('transform', `translate(${x},${y})`);
+Object.entries(POS).forEach(([id, [x, y]]) => place(id, x, y));
+
+// The twins: a binary pair orbiting one shared center (same inner clock).
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let angle = Math.PI, phase = 0;
+function placeTwins() {
+  const ax = TWIN_C[0] + Math.cos(angle) * TWIN_R, ay = TWIN_C[1] + Math.sin(angle) * TWIN_R * 0.3;
+  const bx = TWIN_C[0] - Math.cos(angle) * TWIN_R, by = TWIN_C[1] - Math.sin(angle) * TWIN_R * 0.3;
+  place('joshua', ax, ay); place('jacob', bx, by);
+  twinBond.setAttribute('x1', ax); twinBond.setAttribute('y1', ay);
+  twinBond.setAttribute('x2', bx); twinBond.setAttribute('y2', by);
+}
+placeTwins();
+if (!reduceMotion) {
+  let last = performance.now();
+  (function spin(now) {
+    // Rock rather than orbit fully, so the two names never stack.
+    phase += (now - last) * 0.0006; last = now;
+    angle = Math.PI + Math.sin(phase) * TWIN_TILT;
+    placeTwins();
+    requestAnimationFrame(spin);
+  })(last);
+}
+
+// Detail panel
+const panel = document.getElementById('panel');
+function fmtDate(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
+function select(id) {
+  const p = P[id], t = TIER[p.tier], c = colorOf(id);
+  Object.values(starEls).forEach(g => g.classList.remove('active'));
+  starEls[id].classList.add('active');
+  panel.style.setProperty('--c', c);
+  panel.style.setProperty('--glow', c + '44');
+  const qd = p.q ? p.q.match(/.{4}/g).join('·') : '';
+  let twinNote = '';
+  if (p.twin) {
+    const o = P[p.twin];
+    twinNote = `<p class="note" style="color:${MOON}">Twins: same day, same inner clock — both Life Path 11. Different names, different light: ${P.joshua.first} burns ${TIER[P.joshua.tier].label}, ${P.jacob.first} burns ${TIER[P.jacob.tier].label}. Tap ${o.first} to see the other half.</p>`;
+  }
+  panel.innerHTML = `
+    <div class="rel">${p.rel}${p.founder ? ' · ★ ' + p.founder : ''}</div>
+    <h2>${p.name}</h2>
+    <div class="born">${p.born ? p.born + ' · ' : ''}${fmtDate(p.dob)}</div>
+    <div class="pill"><span class="dot"></span>${t.label.toUpperCase()} · ${t.role.toUpperCase()}</div>
+    ${p.master ? `<div class="moonline">◇ MASTER ${p.master} · MOONSILVER</div>` : ''}
+    <p class="note">${p.note}</p>
+    ${twinNote}
+    <div class="nums">${p.core.map((n, i) => `<div class="num${isMaster(n) ? ' master' : ''}"><b>${n}</b><span>${CORE_LABELS[i]}</span></div>`).join('')}</div>
+    ${p.q ? `<div class="meta"><span>◆ ${qd}</span><span>${p.hz.toFixed(2)} Hz</span></div>` : ''}
+    ${p.q ? `<a class="btn" href="https://soul-maps.thefirstspark.shop/card.html?id=${p.q}" target="_blank" rel="noopener">OPEN SOUL CARD</a>` : ''}
+    ${id !== 'thomas' ? `<a class="btn ghost" href="#" data-back>BACK TO YOU</a>` : ''}
+  `;
+  const back = panel.querySelector('[data-back]');
+  if (back) back.addEventListener('click', e => { e.preventDefault(); select('thomas'); document.getElementById('sky').scrollIntoView({ behavior: 'smooth' }); });
+}
+select('thomas');
+
+// Echoes — patterns that repeat across the line (all read from the numbers above).
+const ECHOES = [
+  { c: MOON, t: 'The 11 runs through six of nine stars',
+    b: 'Michael (Personality 11), Maureen and Dawn (Radiant 11), Katelin (Expression 11), and both twins (Life Path 11). You stand at the center of all of it.' },
+  { c: TIER.green.hex, t: 'Father to son: Life Path 7',
+    b: 'Michael and Thomas walk the same road number — the seeker, the one who thinks it through.' },
+  { c: TIER.ember.hex, t: 'Birthday 1, three generations',
+    b: 'Michael → Thomas → Katelin. The same birthday number handed down the line.' },
+  { c: TIER.rose.hex, t: 'Thomas William → Jacob William',
+    b: 'Jacob\'s name code is yours exactly: Expression 6, Soul Urge 6, Personality 9. And Joshua carries Thomas as his middle name.' },
+  { c: TIER.gold.hex, t: 'Two clocks, one birthday',
+    b: 'Josh and Jacob share a birth date, so they share an inner clock. Their names set their outer light — Gold and Rose. Fraternal, and it shows.' },
+  { c: TIER.red.tint, t: 'Monica → Maureen',
+    b: 'Your mother was born Monica Frost. A name can change; the day you arrive never does.' }
+];
+document.getElementById('echoes').innerHTML = ECHOES.map(e =>
+  `<div class="echo" style="--c:${e.c}"><b>${e.t.toUpperCase()}</b>${e.b}</div>`).join('');
+
+// Birthday countdown (living household + descendants)
+function nextBday(iso) {
+  const [y, m, d] = iso.split('-').map(Number);
+  const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let next = new Date(today.getFullYear(), m - 1, d);
+  if (next < today) next = new Date(today.getFullYear() + 1, m - 1, d);
+  return { days: Math.round((next - today) / 86400000), age: next.getFullYear() - y, date: next };
+}
+const living = ['thomas', 'dawn', 'katelin', 'joshua', 'jacob', 'devon', 'mason'];
+// The twins share one line — one birthday, one party.
+const rows = living.filter(id => id !== 'jacob').map(id => {
+  const nb = nextBday(P[id].dob);
+  const name = id === 'joshua' ? 'Josh & Jacob' : id === 'thomas' ? 'You' : P[id].first;
+  return { id, name, ...nb };
+}).sort((a, b) => a.days - b.days);
+document.getElementById('bdays').innerHTML = rows.map(r => {
+  const c = r.id === 'joshua' ? `linear-gradient(90deg, ${TIER.gold.hex} 50%, ${TIER.rose.hex} 50%)` : colorOf(r.id);
+  const when = r.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return `<div class="bday${r.days === 0 ? ' today' : ''}">
+    <span class="dot" style="background:${c}"></span>
+    <div class="who">${r.name}<small>turns ${r.age} · ${when}</small></div>
+    <div class="days">${r.days === 0 ? '★' : r.days}<small>${r.days === 0 ? 'TODAY' : r.days === 1 ? 'DAY' : 'DAYS'}</small></div>
+  </div>`;
+}).join('');
+
+// Starfield
+(function () {
+  const cv = document.getElementById('stars'), ctx = cv.getContext('2d');
+  let W, H, stars = [];
+  function size() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr;
+    cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+    stars = Array.from({ length: Math.round(innerWidth * innerHeight / 3500) }, () => ({
+      x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.3 * dpr + 0.2, p: Math.random() * 6.28, s: 0.5 + Math.random() * 1.5
+    }));
+  }
+  size(); addEventListener('resize', size);
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const s of stars) {
+      const a = reduceMotion ? 0.6 : 0.35 + 0.45 * Math.sin(s.p + t * 0.001 * s.s);
+      ctx.globalAlpha = a; ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+    }
+    if (!reduceMotion) requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+</body>
+</html>
