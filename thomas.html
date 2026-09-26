@@ -287,8 +287,8 @@ function drawStar(id) {
   el('text', { class: 'name', y: ty, 'text-anchor': 'middle' }, g).textContent = p.first.toUpperCase();
   el('text', { class: 'role', y: ty + 13, 'text-anchor': 'middle', fill: c }, g).textContent = TIER[p.tier].role;
   if (p.born) el('text', { class: 'role', y: ty + 25, 'text-anchor': 'middle', fill: 'rgba(255,255,255,0.45)' }, g).textContent = p.skyBorn || p.born.toLowerCase();
-  g.addEventListener('click', () => select(id));
-  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(id); } });
+  g.addEventListener('click', () => select(id, true));
+  g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(id, true); } });
   starEls[id] = g;
   return g;
 }
@@ -324,7 +324,7 @@ function fmtDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
-function select(id) {
+function select(id, fromTap) {
   const p = P[id], t = TIER[p.tier], c = colorOf(id);
   Object.values(starEls).forEach(g => g.classList.remove('active'));
   starEls[id].classList.add('active');
@@ -349,6 +349,7 @@ function select(id) {
     ${p.q ? `<a class="btn" href="https://soul-maps.thefirstspark.shop/card.html?id=${p.q}" target="_blank" rel="noopener">OPEN SOUL CARD</a>` : ''}
     ${id !== 'thomas' ? `<a class="btn ghost" href="#" data-back>BACK TO YOU</a>` : ''}
   `;
+  if (fromTap) panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
   const back = panel.querySelector('[data-back]');
   if (back) back.addEventListener('click', e => { e.preventDefault(); select('thomas'); document.getElementById('sky').scrollIntoView({ behavior: 'smooth' }); });
 }
