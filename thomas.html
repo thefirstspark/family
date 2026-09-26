@@ -83,6 +83,13 @@ svg#sky { width: 100%; height: auto; display: block; overflow: visible; }
 }
 .pill .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
 .moonline { font-size: 11px; color: var(--moon); letter-spacing: 0.1em; margin-top: 6px; opacity: 0.85; }
+.pattern {
+  margin: 18px auto 4px; max-width: 360px; aspect-ratio: 1; border-radius: 50%;
+  box-shadow: 0 0 60px var(--glow, rgba(16,185,129,0.2));
+}
+.pattern svg { width: 100%; height: 100%; display: block; }
+.pattern:empty, .pattern.off { display: none; }
+.pattern-cap { text-align: center; font-size: 10px; letter-spacing: 0.25em; color: var(--dim); margin-top: 8px; text-transform: uppercase; }
 .note { margin: 16px 0 4px; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.88); }
 .nums { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 18px; }
 .num {
@@ -180,6 +187,7 @@ footer .sig { font-family: 'Orbitron', sans-serif; color: var(--spark); letter-s
 </main>
 
 <script>
+(() => {
 // Tier palette (Color Codex, DL-014): masters are a tint, not a tier.
 const TIER = {
   ember:  { hex: '#ff6a3d', role: 'The First Heat', label: 'Ember' },
@@ -204,7 +212,7 @@ const P = {
              note: 'She came into the world as Monica Frost and was adopted as Maureen. The name changed; the inner clock she arrived with never did. Her Radiant lands on Master 11, so her red is lit with Moonsilver.' },
   thomas:  { name: 'Thomas William Puzakulics', first: 'Thomas', dob: '1966-02-28', rel: 'You', q: '0F042BCC0EAB', hz: 551.75, tier: 'green', core: [7, 6, 6, 9, 1], center: true,
              note: 'Green — The Field. The ground everything else in this sky grows from. Life Path 7 like your father, Birthday 1 like him too — and you handed that 1 straight to Katelin.' },
-  dawn:    { name: 'Dawn Renee Puzakulics', first: 'Dawn', dob: '1965-02-21', rel: 'Your wife', q: 'A0397193DA85', hz: 914.46, tier: 'violet', core: [8, 8, 4, 4, 3],
+  dawn:    { name: 'Dawn Renee Puzakulics', first: 'Dawn', dob: '1965-02-21', rel: 'Your wife', pname: 'Dawn Renee Sheeler', q: 'A0397193DA85', hz: 914.46, tier: 'violet', core: [8, 8, 4, 4, 3],
              born: 'Born Dawn Renee Sheeler', skyBorn: 'née sheeler',
              note: 'Violet — The Transformer, the same color as Katelin. Life Path 8 and Expression 8: a double 8, the builder of what lasts. Born one year and one week before you.' },
   katelin: { name: 'Katelin Jill Puzakulics', first: 'Katelin', dob: '1988-05-19', rel: 'Your daughter', q: 'E1855DD782A3', hz: 824.43, tier: 'violet', core: [5, 11, 4, 7, 1], founder: 'Player One',
@@ -342,6 +350,8 @@ function select(id, fromTap) {
     <div class="born">${p.born ? p.born + ' · ' : ''}${fmtDate(p.dob)}</div>
     <div class="pill"><span class="dot"></span>${t.label.toUpperCase()} · ${t.role.toUpperCase()}</div>
     ${p.master ? `<div class="moonline">◇ MASTER ${p.master} · MOONSILVER</div>` : ''}
+    <div class="pattern${engineReady ? '' : ' off'}" id="pattern"><svg viewBox="0 0 800 800" aria-label="${p.first}'s soul pattern"></svg></div>
+    ${engineReady ? `<div class="pattern-cap">${p.first}'s Soul Pattern</div>` : ''}
     <p class="note">${p.note}</p>
     ${twinNote}
     <div class="nums">${p.core.map((n, i) => `<div class="num${isMaster(n) ? ' master' : ''}"><b>${n}</b><span>${CORE_LABELS[i]}</span></div>`).join('')}</div>
@@ -349,11 +359,55 @@ function select(id, fromTap) {
     ${p.q ? `<a class="btn" href="https://soul-maps.thefirstspark.shop/card.html?id=${p.q}" target="_blank" rel="noopener">OPEN SOUL CARD</a>` : ''}
     ${id !== 'thomas' ? `<a class="btn ghost" href="#" data-back>BACK TO YOU</a>` : ''}
   `;
+  drawPattern(id);
   if (fromTap) panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
   const back = panel.querySelector('[data-back]');
   if (back) back.addEventListener('click', e => { e.preventDefault(); select('thomas'); document.getElementById('sky').scrollIntoView({ behavior: 'smooth' }); });
 }
+// Soul patterns: pulled live from the public generator so canon stays in sync
+// (same slice markers + draw() target patch as thefirstspark.shop/weave.html).
+let engineReady = false, currentId = 'thomas';
+async function loadEngine() {
+  const res = await fetch('https://thefirstspark.shop/soul-pattern-generator.html', { cache: 'no-cache' });
+  const html = await res.text();
+  const start = html.indexOf('/* ---------- config: set these before going live');
+  const end = html.indexOf('function chainText(');
+  if (start < 0 || end < 0) throw new Error('engine markers not found');
+  const code = html.slice(start, end).replace('const svg=document.getElementById("art");', 'const svg=window.TARGET_SVG;');
+  if (!code.includes('window.TARGET_SVG')) throw new Error('draw() target patch failed');
+  const tag = document.createElement('script'); tag.textContent = code; document.head.appendChild(tag);
+  if (typeof window.draw !== 'function' || typeof window.lifePath !== 'function') throw new Error('engine missing draw/lifePath');
+  engineReady = true;
+}
+function soulFor(name, date) {
+  const [y, m, d] = date.split('-').map(Number);
+  const lpI = [], exI = [];
+  const lp = lifePath(y, m, d, lpI), ex = expression(name, exI);
+  const lpDebts = findDebts(lpI), exDebts = findDebts([...exI, ...partDebtPool(name)]);
+  const norm = name.toLowerCase().replace(/\s+/g, ' ');
+  const seed = fnv(norm + '|' + date);
+  const radiant = radiantNumber(lp, ex);
+  return { lp, ex, radiant, tier: tierFromRadiant(radiant), master: isMaster(radiant), seed,
+    vesselSector: fnv('vessel|' + norm) % 12, debtSector: seed % 12,
+    lpDebt: lpDebts.length > 0, exDebt: exDebts.length > 0, lpDebts, exDebts };
+}
+function drawPattern(id) {
+  currentId = id;
+  if (!engineReady) return;
+  const svg = panel.querySelector('#pattern svg');
+  if (!svg) return;
+  try {
+    const p = P[id];
+    window.TARGET_SVG = svg;
+    draw(soulFor(p.pname || p.name, p.dob));
+    svg.querySelectorAll('text').forEach(t => t.remove()); // family gift: no shop watermark
+  } catch (e) {
+    console.warn('pattern draw failed', e);
+    panel.querySelector('#pattern').classList.add('off');
+  }
+}
 select('thomas');
+loadEngine().then(() => select(currentId)).catch(e => console.warn('Soul pattern engine unavailable:', e));
 
 // Echoes — patterns that repeat across the line (all read from the numbers above).
 const ECHOES = [
@@ -423,6 +477,7 @@ document.getElementById('bdays').innerHTML = rows.map(r => {
     if (!reduceMotion) requestAnimationFrame(draw);
   }
   requestAnimationFrame(draw);
+})();
 })();
 </script>
 </body>
